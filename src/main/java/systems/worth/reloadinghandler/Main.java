@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,9 @@ public class Main {
 
     public static void main(String[] args) {
         URL[] urls = parseClassPathArgs(args);
-        logger.info("Loading handler from classpath: " + Arrays.asList(urls));
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info("Loading handler from classpath: " + Arrays.asList(urls));
+        }
         ReloadingHandlerSource handlerSource = new ReloadingHandlerSource(new Watcher(urls), urls, parseHandlerArg(args));
         Server server = new Server(parsePortArg(args), handlerSource);
         Runtime.getRuntime().addShutdownHook(shutdownThread(server));
